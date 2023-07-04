@@ -56,7 +56,10 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options => {
+    options.RespectBrowserAcceptHeader = true;    
+});
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -77,9 +80,13 @@ builder.Services.Configure<IdentityOptions>(opts => {
     opts.Password.RequireLowercase = true;
 });
 
+builder.Services.AddHttpContextAccessor();
+
 builder.Services.AddScoped<IUserRepository,UserRepository>();
 builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IRegisterRepository, RegisterRepository>();
+builder.Services.AddScoped<IMessagesRepository, MessagesRepository>();
+builder.Services.AddScoped<IConversationsRepository, ConversationsRepository>();
 
 var app = builder.Build();
 
@@ -91,10 +98,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
-
-app.MapControllers();
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapControllers();
+});
 
 app.Run();

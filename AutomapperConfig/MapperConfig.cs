@@ -12,6 +12,9 @@ namespace MinimalChatApplication.AutomapperConfig
             CreateMap<UserReponseDTO, User>().ForMember(dest => dest.id, opt => opt.MapFrom(src => src.userId));
             CreateMap<User, UserReponseDTO>().ForMember(dest => dest.userId, opt => opt.MapFrom(src => src.id));
 
+            CreateMap<Message, SendMessagesRequestDTO>().ReverseMap();
+            CreateMap<Message, EditMessageRequestDTO>().ReverseMap();
+
             CreateMap<User, UserRequestDTO>().ReverseMap();
             
         }
