@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace MinimalChatApplication.Migrations
 {
     [DbContext(typeof(EFDataContext))]
-    [Migration("20230703123431_InitialEntities")]
+    [Migration("20230704123950_InitialEntities")]
     partial class InitialEntities
     {
         /// <inheritdoc />
@@ -41,15 +41,12 @@ namespace MinimalChatApplication.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<byte[]>("timestamp")
-                        .IsConcurrencyToken()
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("bytea");
+                    b.Property<long>("timestamp")
+                        .HasColumnType("bigint");
 
                     b.HasKey("id");
 
-                    b.ToTable("Messages");
+                    b.ToTable("message");
                 });
 
             modelBuilder.Entity("MinimalChatApplication.Model.User", b =>
@@ -72,7 +69,7 @@ namespace MinimalChatApplication.Migrations
 
                     b.HasKey("id");
 
-                    b.ToTable("Users");
+                    b.ToTable("user");
                 });
 #pragma warning restore 612, 618
         }

@@ -21,8 +21,19 @@ namespace MinimalChatApplication.Controllers
         [HttpGet]
         public async Task<ActionResult> GetUsers()
         {
-           var result = await _iUserRepository.GetListOfUser();
-            return Ok(result);
+            try
+            {
+                var result = await _iUserRepository.GetListOfUser();
+                if (result != null)
+                {
+                    return Ok(result);
+                }
+                return NotFound(Constant.RecordNotFound);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(Constant.InternalServerError, ex);
+            }
         }
     }
 }

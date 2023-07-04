@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MinimalChatApplication.Model
 {
+    [Table("message")]
     public class Message
     {
         [Key, Required]
@@ -15,9 +17,8 @@ namespace MinimalChatApplication.Model
 
         [Required(ErrorMessage = "Please enter content.")]
         public string content { get; set; }
-
-        [Timestamp]
-        public byte[] timestamp { get; set; }
+        
+        public long timestamp { get; set; }
 
     }
 }

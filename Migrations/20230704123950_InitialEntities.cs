@@ -11,22 +11,22 @@ namespace MinimalChatApplication.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Messages",
+                name: "message",
                 columns: table => new
                 {
                     id = table.Column<string>(type: "text", nullable: false),
                     senderId = table.Column<string>(type: "text", nullable: false),
                     receiverId = table.Column<string>(type: "text", nullable: false),
                     content = table.Column<string>(type: "text", nullable: false),
-                    timestamp = table.Column<byte[]>(type: "bytea", rowVersion: true, nullable: false)
+                    timestamp = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Messages", x => x.id);
+                    table.PrimaryKey("PK_message", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "user",
                 columns: table => new
                 {
                     id = table.Column<string>(type: "text", nullable: false),
@@ -36,7 +36,7 @@ namespace MinimalChatApplication.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.id);
+                    table.PrimaryKey("PK_user", x => x.id);
                 });
         }
 
@@ -44,10 +44,10 @@ namespace MinimalChatApplication.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Messages");
+                name: "message");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "user");
         }
     }
 }

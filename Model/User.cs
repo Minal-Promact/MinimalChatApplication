@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace MinimalChatApplication.Model
 {
+    [Table("user")]
     public class User
     {
         [Key, Required]
