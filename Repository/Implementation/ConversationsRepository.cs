@@ -31,7 +31,7 @@ namespace MinimalChatApplication.Repository.Implementation
             {
                 if (before == null)
                 {
-                    DateTime dateTime = DateTime.Now.AddDays(1);
+                    DateTime dateTime = DateTime.Now;
                     DateTimeOffset dateTimeOffset = new DateTimeOffset(dateTime);
                     before = dateTimeOffset.ToUnixTimeSeconds();
                 }

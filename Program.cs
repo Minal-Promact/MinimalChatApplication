@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
+using MinimalChatApplication.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -101,6 +102,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseRequestLoggingMiddleware();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
