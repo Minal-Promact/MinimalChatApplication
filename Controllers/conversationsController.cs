@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualBasic;
 using MinimalChatApplication.Constants;
 using MinimalChatApplication.DTO.RequestDTO;
+using MinimalChatApplication.Model;
 using MinimalChatApplication.Repository.Implementation;
 using MinimalChatApplication.Repository.Interface;
 
@@ -26,12 +27,8 @@ namespace MinimalChatApplication.Controllers
         public async Task<IActionResult> RetrieveConversationHistory(string userId, [FromQuery] long? before = null, int? count = null, string? sort = null)
         {
             try
-            {                
-
-                if (!ModelState.IsValid)
-                {
-                    return BadRequest(ModelState);
-                }
+            {
+                if (userId == string.Empty) return BadRequest(Constant.EnterMessageId);
 
                 var lstMessage = await _iConversationsRepository.GetListMessage(userId);
                 if (lstMessage == null && lstMessage.Count == 0)

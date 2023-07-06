@@ -6,9 +6,11 @@ namespace MinimalChatApplication.Constants
     {
         public const string Route = "api/[controller]/";
        
-        public const string RegisterUser = "RegisterUser";       
+        public const string RegisterUser = "RegisterUser";
+        public const string logs = "logs";
 
         public const string EnterMessageId = "Enter Message Id";
+        public const string EnterLongValue = "Enter Long Value";
         public const string CouldNotFetchData = "Could not fetch employee data.";
         public const string MessageEditedSuccessfully = "Message edited successfully";
         public const string MessageDeletedSuccessfully = "Message deleted successfully";
