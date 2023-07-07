@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MinimalChatApplication.Constants;
+using MinimalChatApplication.DTO.RequestDTO;
 using MinimalChatApplication.DTO.ResponseDTO;
 using System.Diagnostics.Eventing.Reader;
 
@@ -14,32 +15,10 @@ namespace MinimalChatApplication.Controllers
     {
         [HttpGet]
         [Route(Constant.logs)]
-        public IActionResult logs([FromQuery] long? startDateTime = null, long? endDateTime = null)
+        public IActionResult logs([FromQuery] FromQueryRequestLogging fromQueryRequestLogging)
         {
             try
-            {
-                if (startDateTime is long)
-                {
-
-                }
-                else
-                {
-                    return BadRequest(Constant.EnterLongValue);
-                }
-
-                if (startDateTime == null)
-                {
-                    DateTime dateTime = DateTime.Now.AddMinutes(5);
-                    DateTimeOffset dateTimeOffset = new DateTimeOffset(dateTime);
-                    startDateTime = dateTimeOffset.ToUnixTimeSeconds();
-                }
-
-                if (endDateTime == null)
-                {
-                    DateTime dateTime = DateTime.Now;
-                    DateTimeOffset dateTimeOffset = new DateTimeOffset(dateTime);
-                    endDateTime = dateTimeOffset.ToUnixTimeSeconds();
-                }
+            {               
 
                 // Retrieve the values from the HttpContext
                 var value = HttpContext.Items["logMessages"];
@@ -51,7 +30,7 @@ namespace MinimalChatApplication.Controllers
                 {
                     return NotFound(Constant.RecordNotFound);
                 }
-                List<LogResponse> logRes = lstLogResponse1.Where(log => log.TimeOfCall >= startDateTime && log.TimeOfCall <= endDateTime)
+                List<LogResponse> logRes = lstLogResponse1.Where(log => log.TimeOfCall >= fromQueryRequestLogging.StartDateTime && log.TimeOfCall <= fromQueryRequestLogging.EndDateTime).OrderBy(log=>log.TimeOfCall)
                     .ToList();
 
                 if (logRes == null && logRes.Count == 0)

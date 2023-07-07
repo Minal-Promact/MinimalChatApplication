@@ -25,6 +25,7 @@ namespace MinimalChatApplication.Constants
         public const string LoginSuccessful = "Login Successful";
         public const string LoginFailedDueToIncorrectCredentials = "Login failed due to incorrect credentials.";
         public const string UnauthorizedAccess = "Unauthorized Access";
+        public const string InvalidParamter = "Invalid 'sort' parameter. Sorting mechanism should be 'asc' or 'desc'.";
 
         public const int InternalServerError = 500;
         public const string InternalServerErrorS = "Internal server error";

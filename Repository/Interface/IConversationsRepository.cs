@@ -6,6 +6,6 @@ namespace MinimalChatApplication.Repository.Interface
     public interface IConversationsRepository
     {
         Task<List<Message>> GetListMessage(string userId);
-        Task<List<Message>> RetrieveConversationHistory(List<Message> lstMessage, long? before = null, int? count = null, string? sort = null);
+        Task<List<Message>> RetrieveConversationHistory(List<Message> lstMessage, FromQueryConversationHistory fromQueryConversationHistory);
     }
 }
