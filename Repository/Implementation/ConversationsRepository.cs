@@ -21,35 +21,38 @@ namespace MinimalChatApplication.Repository.Implementation
 
         public async Task<List<Message>> GetListMessage(string userId)
         {
-            return await dbContext.Messages.Where(a => a.senderId == userId).ToListAsync();
+            List<Message> lstSenderMessage = await dbContext.Messages.Where(a => a.senderId == userId).ToListAsync();
+            List<Message> lstReceiverMessage = await dbContext.Messages.Where(a => a.receiverId == userId).ToListAsync();
+            var result = lstSenderMessage.Concat(lstReceiverMessage).OrderBy(x => x.timestamp).ToList();
+            return result;
         }
 
-        public async Task<List<Message>> RetrieveConversationHistory(List<Message> lstMessage, long? before = null, int? count = null, string? sort = null)
+        public async Task<List<Message>> RetrieveConversationHistory(List<Message> lstMessage, FromQueryConversationHistory fromQueryConversationHistory)
         {           
             
             if (lstMessage != null && lstMessage.Count > 0)
             {
-                if (before == null)
+                if (fromQueryConversationHistory.Before == null)
                 {
                     DateTime dateTime = DateTime.Now;
                     DateTimeOffset dateTimeOffset = new DateTimeOffset(dateTime);
-                    before = dateTimeOffset.ToUnixTimeSeconds();
+                    fromQueryConversationHistory.Before = dateTimeOffset.ToUnixTimeSeconds();
                 }
 
-                lstMessage = lstMessage.Where(a => a.timestamp < before).ToList();
+                lstMessage = lstMessage.Where(a => a.timestamp < fromQueryConversationHistory.Before).ToList();
 
-                if (count == null)
+                if (fromQueryConversationHistory.Count == null)
                 {
-                    count = 20;
+                    fromQueryConversationHistory.Count = 20;
                 }
 
-                lstMessage = lstMessage.Take(count.Value).ToList();
+                lstMessage = lstMessage.Take(fromQueryConversationHistory.Count).ToList();
 
-                if (sort == null)
+                if (fromQueryConversationHistory.Sort == "asc")
                 {
                     lstMessage = lstMessage.OrderBy(m => m.timestamp).ToList();
                 }
-                else if (sort.ToLower() == "desc")
+                else if (fromQueryConversationHistory.Sort.ToLower() == "desc")
                 {
                     lstMessage = lstMessage.OrderByDescending(m => m.timestamp).ToList();
                 }                

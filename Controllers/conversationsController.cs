@@ -24,11 +24,17 @@ namespace MinimalChatApplication.Controllers
         }
 
         [HttpGet("{userId}")]
-        public async Task<IActionResult> RetrieveConversationHistory(string userId, [FromQuery] long? before = null, int? count = null, string? sort = null)
+        public async Task<IActionResult> RetrieveConversationHistory(string userId, [FromQuery] FromQueryConversationHistory fromQueryConversationHistory)
         {
             try
             {
                 if (userId == string.Empty) return BadRequest(Constant.EnterMessageId);
+                
+
+                if (fromQueryConversationHistory.Sort.ToLower() != "asc" && fromQueryConversationHistory.Sort.ToLower() != "desc")
+                {
+                    return BadRequest(Constant.InvalidParamter);
+                }
 
                 var lstMessage = await _iConversationsRepository.GetListMessage(userId);
                 if (lstMessage == null && lstMessage.Count == 0)
@@ -37,7 +43,7 @@ namespace MinimalChatApplication.Controllers
                 }
                 
 
-                var messageResult = await _iConversationsRepository.RetrieveConversationHistory(lstMessage, before, count, sort);
+                var messageResult = await _iConversationsRepository.RetrieveConversationHistory(lstMessage, fromQueryConversationHistory);
                 if (messageResult != null)
                 {
                     return Ok(messageResult);
