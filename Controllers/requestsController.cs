@@ -33,12 +33,12 @@ namespace MinimalChatApplication.Controllers
                 List<LogResponse> logRes = lstLogResponse1.Where(log => log.TimeOfCall >= fromQueryRequestLogging.StartDateTime && log.TimeOfCall <= fromQueryRequestLogging.EndDateTime).OrderBy(log=>log.TimeOfCall)
                     .ToList();
 
-                if (logRes == null && logRes.Count == 0)
+                if (logRes != null && logRes.Count > 0)
                 {
-                    return NotFound(Constant.RecordNotFound);
-                }
+                    return Ok(logRes);
 
-                return Ok(logRes);
+                }
+                return NotFound(Constant.RecordNotFound);
             }
             catch (Exception ex)
             {
