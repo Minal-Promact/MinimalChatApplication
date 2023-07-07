@@ -3,8 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using MinimalChatApplication.Data;
 using MinimalChatApplication.DTO.RequestDTO;
 using MinimalChatApplication.DTO.ResponseDTO;
+using MinimalChatApplication.Helper;
 using MinimalChatApplication.Model;
 using MinimalChatApplication.Repository.Interface;
+using System.Security.Cryptography.Xml;
 
 namespace MinimalChatApplication.Repository.Implementation
 {
@@ -27,7 +29,8 @@ namespace MinimalChatApplication.Repository.Implementation
         public async Task<UserReponseDTO> RegisterUser(UserRequestDTO userRequestDTO)
         {
             var user = _mapper.Map<UserRequestDTO, User>(userRequestDTO);
-
+            // Encrypted password
+            user.password = EncryptAndDecryptValue.Encryptword(user.password);            
             await dbContext.Users.AddAsync(user);
             await dbContext.SaveChangesAsync();
 
