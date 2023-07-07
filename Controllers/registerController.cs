@@ -32,7 +32,7 @@ namespace MinimalChatApplication.Controllers
                 {
                     return Conflict(Constant.TheRecordAlreadyExists);
                 }
-
+                
                 var result = await _iRegisterRepository.RegisterUser(userRequestDTO);
 
                 return Ok(result);

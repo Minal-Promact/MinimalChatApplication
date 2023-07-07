@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using MinimalChatApplication.Data;
 using MinimalChatApplication.DTO.RequestDTO;
 using MinimalChatApplication.DTO.ResponseDTO;
+using MinimalChatApplication.Helper;
 using MinimalChatApplication.Model;
 using MinimalChatApplication.Repository.Interface;
 using System.IdentityModel.Tokens.Jwt;
@@ -28,7 +29,13 @@ namespace MinimalChatApplication.Repository.Implementation
 
         public async Task<User> CheckUserDetails(LoginRequestDTO loginRequestDTO)
         {
-            return await dbContext.Users.FirstOrDefaultAsync(a=>a.email == loginRequestDTO.email && a.password == loginRequestDTO.password);            
+            loginRequestDTO.password = EncryptAndDecryptValue.Encryptword(loginRequestDTO.password); 
+            var user = await dbContext.Users.FirstOrDefaultAsync(a=>a.email == loginRequestDTO.email && a.password == loginRequestDTO.password);
+            if (user != null)
+            {
+                user.password = EncryptAndDecryptValue.Decryptword(user.password); ;
+            }
+            return user;
         }
 
         public async Task<JWTTokenResponseDTO> GetJWTTokenFromUserDetails(User user)
