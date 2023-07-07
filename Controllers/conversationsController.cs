@@ -44,7 +44,7 @@ namespace MinimalChatApplication.Controllers
                 
 
                 var messageResult = await _iConversationsRepository.RetrieveConversationHistory(lstMessage, fromQueryConversationHistory);
-                if (messageResult != null)
+                if (messageResult != null && messageResult.Count > 0)
                 {
                     return Ok(messageResult);
                 }
