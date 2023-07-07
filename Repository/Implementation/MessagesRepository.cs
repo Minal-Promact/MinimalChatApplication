@@ -21,7 +21,7 @@ namespace MinimalChatApplication.Repository.Implementation
 
         public async Task<Message> SendMessage(Message message)
         {  
-            DateTime dateTime = DateTime.Now.AddDays(1);
+            DateTime dateTime = DateTime.Now;
             DateTimeOffset dateTimeOffset = new DateTimeOffset(dateTime);
             message.timestamp = dateTimeOffset.ToUnixTimeSeconds();
 
