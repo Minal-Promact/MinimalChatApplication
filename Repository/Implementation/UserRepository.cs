@@ -19,10 +19,11 @@ namespace MinimalChatApplication.Repository.Implementation
             _mapper = mapper;
         }
 
-        public async Task<List<User>> GetListOfUser()
+        public async Task<List<UserReponseDTO>> GetListOfUser()
         {
             var user = await dbContext.Users.ToListAsync();
-            return user;
+            List<UserReponseDTO> lstUserReponseDTO = user.Select(a => new UserReponseDTO() { userId = a.id, name = a.name,email = a.email}).ToList();
+            return lstUserReponseDTO;
         }
 
         

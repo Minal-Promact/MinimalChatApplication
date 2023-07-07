@@ -6,6 +6,6 @@ namespace MinimalChatApplication.Repository.Interface
 {
     public interface IUserRepository
     {
-        Task<List<User>> GetListOfUser();
+        Task<List<UserReponseDTO>> GetListOfUser();
     }
 }
