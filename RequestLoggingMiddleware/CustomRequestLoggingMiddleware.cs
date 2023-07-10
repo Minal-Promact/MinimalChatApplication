@@ -3,6 +3,8 @@ using MinimalChatApplication.DTO.ResponseDTO;
 using System.Text;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using MinimalChatApplication.Repository.Interface;
+using MinimalChatApplication.Repository.Implementation;
 
 namespace MinimalChatApplication.RequestLoggingMiddleware
 {
@@ -10,18 +12,18 @@ namespace MinimalChatApplication.RequestLoggingMiddleware
     {
         private readonly RequestDelegate _next;
         private readonly ILogger<CustomRequestLoggingMiddleware> _logger;
-        private readonly List<string> _logMessages;
         List<LogResponse> lstLogResponses;
+        private readonly List<string> _logMessages;
 
         public CustomRequestLoggingMiddleware(RequestDelegate next, ILogger<CustomRequestLoggingMiddleware> logger)
         {
             _next = next;
             _logger = logger;
             _logMessages = new List<string>();
-            lstLogResponses = new List<LogResponse>();
+            lstLogResponses = new List<LogResponse>();            
         }
 
-        public async Task InvokeAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context,IRequestLoggingMiddleware _iRequestLoggingMiddleware)
         {
             // Enable buffering to capture the request body
             context.Request.EnableBuffering();
@@ -30,27 +32,27 @@ namespace MinimalChatApplication.RequestLoggingMiddleware
             LogResponse logResponse = new LogResponse();
             
             var ipAddress = context.Connection.RemoteIpAddress?.ToString(); 
-            logResponse.IPOfCaller = ipAddress;
-            logResponse.UserName = ""; 
+            logResponse.iPOfCaller = ipAddress;
+            logResponse.userName = ""; 
 
             DateTime dateTime = DateTime.Now;
             DateTimeOffset dateTimeOffset = new DateTimeOffset(dateTime);
-            logResponse.TimeOfCall = dateTimeOffset.ToUnixTimeSeconds();           
+            logResponse.timeOfCall = dateTimeOffset.ToUnixTimeSeconds();           
 
 
             // Log the request information
             var logMessage = $"Request: {context.Request.Method} {context.Request.Path} {context.Request.QueryString}";
             _logMessages.Add(logMessage);
 
-            logResponse.Method = context.Request.Method;
-            logResponse.Path = context.Request.Path;
-            logResponse.QueryString = context.Request.QueryString;
+            logResponse.method = context.Request.Method;
+            logResponse.path = context.Request.Path;
+            logResponse.queryString = context.Request.QueryString;
 
 
             // Read and log the request body if present
             string requestBody = await GetRequestBodyAsync(context.Request);
 
-            logResponse.RequestBody = requestBody;
+            logResponse.requestBody = requestBody;
 
             if (!string.IsNullOrEmpty(requestBody))
             {
@@ -62,6 +64,14 @@ namespace MinimalChatApplication.RequestLoggingMiddleware
             lstLogResponses.Add(logResponse);
             context.Items["logMessages"] = _logMessages;
             context.Items["lstLogResponses"] = lstLogResponses;
+
+
+            //store the values in the db
+            if (logResponse != null)
+            {
+                _iRequestLoggingMiddleware.PostRequestLoggingMiddleware(logResponse);
+            }
+
 
             // Call the next middleware in the pipeline
             await _next(context);

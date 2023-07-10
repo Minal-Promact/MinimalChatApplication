@@ -16,7 +16,8 @@ namespace MinimalChatApplication.AutomapperConfig
             CreateMap<Message, EditMessageRequestDTO>().ReverseMap();
 
             CreateMap<User, UserRequestDTO>().ReverseMap();
-            
+            CreateMap<RequestLogging, LogResponse>().ReverseMap();
+
         }
     }
 }
