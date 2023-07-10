@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using MinimalChatApplication.Constants;
 using MinimalChatApplication.DTO.RequestDTO;
 using MinimalChatApplication.DTO.ResponseDTO;
+using MinimalChatApplication.Model;
+using MinimalChatApplication.Repository.Interface;
 using System.Diagnostics.Eventing.Reader;
 
 namespace MinimalChatApplication.Controllers
@@ -13,31 +15,40 @@ namespace MinimalChatApplication.Controllers
     [ApiController]
     public class requestsController : ControllerBase
     {
+        private readonly IRequestLoggingMiddleware _iRequestLoggingMiddleware;
+
+        public requestsController(IRequestLoggingMiddleware iRequestLoggingMiddleware)
+        {
+            _iRequestLoggingMiddleware = iRequestLoggingMiddleware;
+        }
+
         [HttpGet]
         [Route(Constant.logs)]
-        public IActionResult logs([FromQuery] FromQueryRequestLogging fromQueryRequestLogging)
+        public async Task<IActionResult> logs([FromQuery] FromQueryRequestLogging fromQueryRequestLogging)
         {
             try
             {               
-
+                /*
                 // Retrieve the values from the HttpContext
                 var value = HttpContext.Items["logMessages"];
 
                 object v = HttpContext.Items["lstLogResponses"];
 
-                List<LogResponse> lstLogResponse1 = (List<LogResponse>)v;
-                if (lstLogResponse1 == null && lstLogResponse1.Count == 0)
+                List<LogResponse> lstLogResponse = (List<LogResponse>)v;
+                if (lstLogResponse == null && lstLogResponse.Count == 0)
                 {
                     return NotFound(Constant.RecordNotFound);
                 }
-                List<LogResponse> logRes = lstLogResponse1.Where(log => log.TimeOfCall >= fromQueryRequestLogging.StartDateTime && log.TimeOfCall <= fromQueryRequestLogging.EndDateTime).OrderBy(log=>log.TimeOfCall)
-                    .ToList();
+                */
+
+                List<RequestLogging> logRes = await _iRequestLoggingMiddleware.GetRequestLoggingMiddleware(fromQueryRequestLogging);
+                    
 
                 if (logRes != null && logRes.Count > 0)
                 {
                     return Ok(logRes);
-
                 }
+
                 return NotFound(Constant.RecordNotFound);
             }
             catch (Exception ex)

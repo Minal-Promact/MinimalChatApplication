@@ -92,6 +92,7 @@ builder.Services.AddScoped<ILoginRepository, LoginRepository>();
 builder.Services.AddScoped<IRegisterRepository, RegisterRepository>();
 builder.Services.AddScoped<IMessagesRepository, MessagesRepository>();
 builder.Services.AddScoped<IConversationsRepository, ConversationsRepository>();
+builder.Services.AddScoped<IRequestLoggingMiddleware, RequestLoggingMiddleware>();
 
 var app = builder.Build();
 
